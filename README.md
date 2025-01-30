@@ -2,6 +2,10 @@
 
 PREVIEW : https://tes-rw-2.netlify.app/
 
+STYLED & REFACTORED : https://styled-tes-rw-2.netlify.app/ (branch `feat/styled`)
+
+(This version includes full styling and refactor improvements.)
+
 ## Project Structure
 
 - `src/`
