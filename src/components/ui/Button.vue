@@ -3,12 +3,16 @@
     :class="[
       $style.baseButton,
       $style[variant],
+      $style[size],
       { [$style.disabled]: disabled },
     ]"
     :disabled="disabled"
     v-bind="$attrs"
   >
-    <Loader :class="[$style.loader, { [$style.visible]: isLoading }]" />
+    <Loader
+      variant="default"
+      :class="[$style.loader, { [$style.visible]: isLoading }]"
+    />
     <span :class="[$style.content, { [$style.visible]: !isLoading }]">
       <slot></slot>
     </span>
@@ -27,6 +31,11 @@ defineProps({
     default: "primary",
     validator: (value) => ["primary", "secondary", "outline"].includes(value),
   },
+  size: {
+    type: String,
+    default: "normal",
+    validator: (value) => ["small", "normal"].includes(value),
+  },
   disabled: {
     type: Boolean,
     default: false,
@@ -38,11 +47,17 @@ defineProps({
   border: none;
   background: transparent;
   border-radius: 0.25rem;
-  padding: 0.75rem 1rem;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-weight: 600;
+  font-size: 0.9rem;
+  line-height: 1.6;
   display: grid;
+}
+.normal {
+  padding: 0.5rem 1rem;
+}
+.small {
+  padding: 0.25rem 1rem;
 }
 .loader {
   grid-area: 1/1;

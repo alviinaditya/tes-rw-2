@@ -42,7 +42,7 @@ defineProps({
   padding: 0.25rem 1rem;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-weight: 600;
+  font-size: 0.9rem;
   text-decoration: none;
 }
 .primary {

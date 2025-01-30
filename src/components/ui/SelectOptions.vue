@@ -1,29 +1,40 @@
 <template>
   <div :class="[$style.inputContainer]">
-    <label v-if="label" :class="[$style.inputLabel]" :for="id">{{
-      label
-    }}</label>
-    <input
-      :id="id"
-      v-model="model"
-      :class="[$style.inputField]"
-      v-bind="$attrs"
-    />
+    <label :for="id" :class="[$style.inputLabel]">{{ label }}</label>
+    <select :id="id" v-model="model" :class="[$style.inputField]">
+      <option value="" disabled selected hidden>
+        {{ placeholder || "Select an option" }}
+      </option>
+      <option v-for="option in options" :key="option.value" :value="option.id">
+        {{ option.name }}
+      </option>
+    </select>
   </div>
 </template>
+
 <script setup>
 defineProps({
+  label: {
+    type: String,
+    required: true,
+  },
+  options: {
+    type: Array,
+    required: true,
+  },
   id: {
     type: String,
     required: true,
   },
-  label: {
+  placeholder: {
     type: String,
     default: "",
   },
 });
+
 const model = defineModel();
 </script>
+
 <style module>
 .inputContainer {
   display: flex;
@@ -50,9 +61,5 @@ const model = defineModel();
 .inputField:focus {
   border-color: var(--color-primary);
   box-shadow: 0 0 0 1px var(--color-primary);
-}
-
-.inputField::placeholder {
-  color: var(--color-text-muted);
 }
 </style>

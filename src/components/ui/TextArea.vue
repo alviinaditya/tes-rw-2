@@ -1,29 +1,36 @@
 <template>
   <div :class="[$style.inputContainer]">
-    <label v-if="label" :class="[$style.inputLabel]" :for="id">{{
-      label
-    }}</label>
-    <input
+    <label :for="id" :class="[$style.inputLabel]">{{ label }}</label>
+    <textarea
       :id="id"
       v-model="model"
+      :placeholder="placeholder"
       :class="[$style.inputField]"
-      v-bind="$attrs"
-    />
+      rows="4"
+      cols="50"
+    ></textarea>
   </div>
 </template>
+
 <script setup>
 defineProps({
+  label: {
+    type: String,
+    required: true,
+  },
   id: {
     type: String,
     required: true,
   },
-  label: {
+  placeholder: {
     type: String,
     default: "",
   },
 });
+
 const model = defineModel();
 </script>
+
 <style module>
 .inputContainer {
   display: flex;
@@ -45,14 +52,11 @@ const model = defineModel();
   color: var(--color-text);
   outline: none;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  resize: vertical;
 }
 
 .inputField:focus {
   border-color: var(--color-primary);
   box-shadow: 0 0 0 1px var(--color-primary);
-}
-
-.inputField::placeholder {
-  color: var(--color-text-muted);
 }
 </style>

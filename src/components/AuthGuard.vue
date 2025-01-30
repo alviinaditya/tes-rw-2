@@ -1,6 +1,10 @@
 <template>
-  <Navbar />
-  <slot></slot>
+  <header>
+    <Navbar />
+  </header>
+  <main class="layout">
+    <slot></slot>
+  </main>
 </template>
 <script setup>
 import { useAuthStore } from "../stores/auth";
