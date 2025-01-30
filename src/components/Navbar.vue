@@ -3,7 +3,7 @@
     <div class="navbar-items">
       <router-link to="/dashboard">Dashboard</router-link>
       <router-link to="/data">List Data</router-link>
-      <router-link to="/categories">Category</router-link>
+      <router-link to="/categories">Categories</router-link>
       <router-link to="/qa">QA</router-link>
     </div>
     <Button @click="handleLogout" variant="secondary">Logout</Button>

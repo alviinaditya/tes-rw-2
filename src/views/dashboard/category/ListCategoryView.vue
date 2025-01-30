@@ -34,7 +34,7 @@ const columns = [
   { label: "Name", key: "name" },
 ];
 
-const getCategoies = async () => {
+const getCategories = async () => {
   isLoading.value = true;
   try {
     const res = await getCategoryListApi(page.value);
@@ -53,10 +53,10 @@ const handlePageChange = (val) => {
 };
 
 watch(page, () => {
-  getCategoies();
+  getCategories();
 });
 
 onMounted(() => {
-  getCategoies();
+  getCategories();
 });
 </script>

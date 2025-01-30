@@ -46,7 +46,7 @@ import TextArea from "@/components/ui/TextArea.vue";
 const router = useRouter();
 const route = useRoute();
 const categories = ref([]);
-
+const isLoading = ref(false);
 const request = ref({
   categoryId: "",
   content: "",
@@ -57,6 +57,7 @@ const handleBack = () => {
 };
 
 const handleSubmit = async () => {
+  isLoading.value = true;
   try {
     const res = await updateDataApi({
       id: route.params.id,
@@ -68,6 +69,8 @@ const handleSubmit = async () => {
     router.push({ name: "data" });
   } catch (error) {
     console.log(error);
+  } finally {
+    isLoading.value = false;
   }
 };
 
@@ -82,7 +85,7 @@ const getData = async () => {
   }
 };
 
-const getCategoies = async () => {
+const getCategories = async () => {
   try {
     const res = await getCategoryListApi();
     const data = await res.json();
@@ -93,7 +96,7 @@ const getCategoies = async () => {
 };
 
 onMounted(async () => {
-  getCategoies();
+  getCategories();
   getData();
 });
 </script>
