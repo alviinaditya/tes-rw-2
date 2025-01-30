@@ -1,7 +1,7 @@
 <script setup>
 import { useAuthStore } from "../stores/auth";
 import { loginApi } from "../api/index.js";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
@@ -23,6 +23,12 @@ const handleLogin = async () => {
     console.log(error);
   }
 };
+
+onMounted(() => {
+  if (store.isAuthenticated) {
+    router.push({ name: "dashboard" });
+  }
+});
 </script>
 
 <template>
