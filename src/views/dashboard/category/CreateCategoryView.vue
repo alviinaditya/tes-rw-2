@@ -55,7 +55,6 @@ onMounted(async () => {
       id: (index + 1).toString(),
       name: department,
     }));
-    console.log("list", departmentList.value);
   } catch (error) {
     console.log(error);
   }
@@ -73,7 +72,6 @@ const handleSubmit = async () => {
       name: request.value.name,
     });
     const data = await res.json();
-    console.log(data);
     router.push({ name: "categories" });
   } catch (error) {
     console.log(error);

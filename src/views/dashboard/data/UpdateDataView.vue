@@ -65,7 +65,6 @@ const handleSubmit = async () => {
       content: request.value.content,
     });
     const data = await res.json();
-    console.log(data);
     router.push({ name: "data" });
   } catch (error) {
     console.log(error);
