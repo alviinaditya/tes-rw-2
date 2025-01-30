@@ -1,13 +1,47 @@
+<template>
+  <AuthGuard>
+    <div class="heading-container">
+      <h1>Update Data</h1>
+      <Button @click="handleBack" size="small">Back</Button>
+    </div>
+    <div>
+      <form @submit.prevent="handleSubmit" class="form-group">
+        <SelectOptions
+          id="category"
+          label="Category"
+          placeholder="Select Category"
+          v-model="request.categoryId"
+          :options="categories"
+        />
+        <TextArea
+          id="content"
+          label="Content"
+          placeholder="Enter your content"
+          v-model="request.content"
+        ></TextArea>
+        <Button
+          variant="primary"
+          type="submit"
+          :isLoading="isLoading"
+          :disabled="isLoading"
+          >Update Data</Button
+        >
+      </form>
+    </div>
+  </AuthGuard>
+</template>
 <script setup>
-import AuthGuard from "../components/AuthGuard.vue";
+import AuthGuard from "@/components/AuthGuard.vue";
 import {
   getCategoryListApi,
   getDataByIdApi,
   updateDataApi,
-} from "../api/index.js";
-import { ref } from "vue";
+} from "@/api/index.js";
+import { onMounted, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import { onMounted } from "vue";
+import Button from "@/components/ui/Button.vue";
+import SelectOptions from "@/components/ui/SelectOptions.vue";
+import TextArea from "@/components/ui/TextArea.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -17,6 +51,10 @@ const request = ref({
   categoryId: "",
   content: "",
 });
+
+const handleBack = () => {
+  router.back();
+};
 
 const handleSubmit = async () => {
   try {
@@ -59,23 +97,3 @@ onMounted(async () => {
   getData();
 });
 </script>
-
-<template>
-  <AuthGuard>
-    <div>
-      <form @submit.prevent="handleSubmit">
-        <select v-model="request.categoryId">
-          <option
-            v-for="category in categories"
-            :key="category.id"
-            :value="category.id"
-          >
-            {{ category.name }}
-          </option>
-        </select>
-        <input type="text" v-model="request.content" />
-        <button type="submit">Update</button>
-      </form>
-    </div>
-  </AuthGuard>
-</template>
