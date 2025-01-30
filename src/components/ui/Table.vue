@@ -107,15 +107,19 @@ th,
 td {
   padding: 10px;
   text-align: left;
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-border);
 }
 
 th {
+  font-weight: 600;
+  color: var(--color-primary-text);
+  background-color: var(--color-primary);
+  border-color: var(--color-primary-hover);
   cursor: pointer;
 }
 
 th:hover {
-  background-color: #f5f5f5;
+  background-color: var(--color-primary-hover);
 }
 
 .pagination {

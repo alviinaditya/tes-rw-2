@@ -4,7 +4,7 @@
     <template v-else>
       <div class="heading-container">
         <h1>Categories</h1>
-        <ButtonLink to="/categories/create">Create Data</ButtonLink>
+        <ButtonLink to="/categories/create">Create Category</ButtonLink>
       </div>
       <Table
         :data="categories"

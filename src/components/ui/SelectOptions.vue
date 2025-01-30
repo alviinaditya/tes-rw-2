@@ -5,7 +5,11 @@
       <option value="" disabled selected hidden>
         {{ placeholder || "Select an option" }}
       </option>
-      <option v-for="option in options" :key="option.value" :value="option.id">
+      <option
+        v-for="option in options"
+        :key="option.value"
+        :value="option[valueField]"
+      >
         {{ option.name }}
       </option>
     </select>
@@ -29,6 +33,10 @@ defineProps({
   placeholder: {
     type: String,
     default: "",
+  },
+  valueField: {
+    type: String,
+    default: "id",
   },
 });
 
