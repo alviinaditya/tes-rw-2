@@ -1,29 +1,71 @@
 # tes-frontend-2
 
-This template should help get you started developing with Vue 3 in Vite.
+PREVIEW : https://tes-rw-2.netlify.app/
 
-## Recommended IDE Setup
+## Project Structure
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+- `src/`
+  - `components/`
+  - `views/`
+  - `main.js`
+  - `router.js`
+- `public/`
+- `index.html`
+- `package.json`
+- `jsconfig.json`
+- `vite.config.js`
 
-## Customize configuration
+## Feature
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+- Login
+- Dashboard
+- List Data
+- Create Data
+- Update Data
+- List Category
+- Create Category
+- QA
+- Logout
 
-## Project Setup
+## Run project locally
 
-```sh
-npm install
-```
+To run this application locally, follow these steps:
 
-### Compile and Hot-Reload for Development
+1. **Clone the repository**
 
-```sh
-npm run dev
-```
+   ```bash
+   git clone https://github.com/alviinaditya/tes-rw-2.git
+   ```
 
-### Compile and Minify for Production
+2. **Navigate to the project directory**
 
-```sh
-npm run build
-```
+   ```bash
+   cd tes-rw-2
+   ```
+
+3. **Install Dependencies**
+
+   ```bash
+   npm install
+   ```
+
+4. **Add Environment Variables**
+
+   Create a `.env` file in the root of the project and add the following environment variables:
+
+   ```bash
+   VITE_API_URL = { API_URL}
+   ```
+
+5. **Start the Development Server**
+
+   ```bash
+   npm run dev
+   ```
+
+6. **Build for Production**
+   ```bash
+   npm run build
+   ```
+
+---
