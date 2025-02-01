@@ -1,5 +1,5 @@
 <template>
-  <AuthGuard>
+  <AuthGuard :isLoading>
     <div class="heading-container">
       <h1>Create Category</h1>
       <Button @click="handleBack" size="small">Back</Button>
@@ -23,8 +23,8 @@
       <Button
         variant="primary"
         type="submit"
-        :isLoading="isLoading"
-        :disabled="isLoading"
+        :isLoading="isSubmitting"
+        :disabled="isSubmitting"
         >Create Category</Button
       >
     </form>
@@ -41,7 +41,8 @@ import SelectOptions from "@/components/ui/SelectOptions.vue";
 
 const departmentList = ref([]);
 const router = useRouter();
-const isLoading = ref(false);
+const isSubmitting = ref(false);
+const isLoading = ref(true);
 const request = ref({
   department: "",
   name: "",
@@ -57,6 +58,8 @@ onMounted(async () => {
     }));
   } catch (error) {
     console.log(error);
+  } finally {
+    isLoading.value = false;
   }
 });
 
@@ -65,7 +68,7 @@ const handleBack = () => {
 };
 
 const handleSubmit = async () => {
-  isLoading.value = true;
+  isSubmitting.value = true;
   try {
     const res = await createCategoryApi({
       department: request.value.department,
@@ -76,7 +79,7 @@ const handleSubmit = async () => {
   } catch (error) {
     console.log(error);
   } finally {
-    isLoading.value = false;
+    isSubmitting.value = false;
   }
 };
 </script>

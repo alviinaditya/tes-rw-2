@@ -1,5 +1,5 @@
 <template>
-  <AuthGuard>
+  <AuthGuard :isLoading>
     <div class="heading-container">
       <h1>Question</h1>
     </div>
@@ -20,8 +20,8 @@
       <Button
         variant="primary"
         type="submit"
-        :isLoading="isLoading"
-        :disabled="isLoading"
+        :isLoading="isSubmitting"
+        :disabled="isSubmitting"
         >Submit</Button
       >
     </form>
@@ -51,7 +51,8 @@ import TextArea from "@/components/ui/TextArea.vue";
 import Button from "@/components/ui/Button.vue";
 
 const categories = ref([]);
-const isLoading = ref(false);
+const isSubmitting = ref(false);
+const isLoading = ref(true);
 const request = ref({
   categoryId: "",
   content: "",
@@ -60,7 +61,7 @@ const request = ref({
 const responses = ref([]);
 
 const handleSubmit = async () => {
-  isLoading.value = true;
+  isSubmitting.value = true;
   try {
     const res = await postQAAnswerApi({
       category_id: request.value.categoryId,
@@ -71,7 +72,7 @@ const handleSubmit = async () => {
   } catch (error) {
     console.log(error);
   } finally {
-    isLoading.value = false;
+    isSubmitting.value = false;
   }
 };
 
@@ -82,6 +83,8 @@ onMounted(async () => {
     categories.value = data.data.result;
   } catch (error) {
     console.log(error);
+  } finally {
+    isLoading.value = false;
   }
 });
 </script>

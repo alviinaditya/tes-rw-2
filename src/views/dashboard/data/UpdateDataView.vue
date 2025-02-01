@@ -1,5 +1,5 @@
 <template>
-  <AuthGuard>
+  <AuthGuard :isLoading>
     <div class="heading-container">
       <h1>Update Data</h1>
       <Button @click="handleBack" size="small">Back</Button>
@@ -22,8 +22,8 @@
         <Button
           variant="primary"
           type="submit"
-          :isLoading="isLoading"
-          :disabled="isLoading"
+          :isLoading="isSubmitting"
+          :disabled="isSubmitting"
           >Update Data</Button
         >
       </form>
@@ -46,7 +46,8 @@ import TextArea from "@/components/ui/TextArea.vue";
 const router = useRouter();
 const route = useRoute();
 const categories = ref([]);
-const isLoading = ref(false);
+const isSubmitting = ref(false);
+const isLoading = ref(true);
 const request = ref({
   categoryId: "",
   content: "",
@@ -57,7 +58,7 @@ const handleBack = () => {
 };
 
 const handleSubmit = async () => {
-  isLoading.value = true;
+  isSubmitting.value = true;
   try {
     const res = await updateDataApi({
       id: route.params.id,
@@ -69,7 +70,7 @@ const handleSubmit = async () => {
   } catch (error) {
     console.log(error);
   } finally {
-    isLoading.value = false;
+    isSubmitting.value = false;
   }
 };
 
@@ -95,7 +96,8 @@ const getCategories = async () => {
 };
 
 onMounted(async () => {
-  getCategories();
-  getData();
+  await getCategories();
+  await getData();
+  isLoading.value = false;
 });
 </script>

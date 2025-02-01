@@ -1,6 +1,7 @@
 <template>
   <main class="center">
-    <Card>
+    <LoadingScreen v-if="isCheckingAuth" />
+    <Card v-else>
       <template #header>
         <h1 class="heading-text">Login</h1>
       </template>
@@ -38,10 +39,12 @@ import { useRouter } from "vue-router";
 import Button from "@/components/ui/Button.vue";
 import Card from "@/components/ui/Card.vue";
 import Input from "@/components/ui/Input.vue";
+import LoadingScreen from "@/components/LoadingScreen.vue";
 
 const router = useRouter();
 const store = useAuthStore();
 const isLoading = ref(false);
+const isCheckingAuth = ref(true);
 const request = ref({
   username: "",
   password: "",
@@ -66,6 +69,7 @@ onMounted(() => {
   if (store.isAuthenticated) {
     router.push({ name: "dashboard" });
   }
+  isCheckingAuth.value = false;
 });
 </script>
 <style scoped>
