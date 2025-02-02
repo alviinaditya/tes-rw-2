@@ -10,6 +10,7 @@
   --color-text: rgba(102, 102, 102, 1);
   --color-text-hover: rgba(68, 68, 68, 1);
   --color-text-muted: rgba(128, 128, 128, 1);
+  --color-text-white: rgba(255, 255, 245, 1);
 
   --color-primary: rgba(137, 103, 179, 1);
   --color-primary-hover: rgba(98, 78, 136, 1);
@@ -18,6 +19,11 @@
 
   --color-primary-text: rgb(223, 211, 251);
   --color-secondary-text: rgb(255, 241, 241);
+
+  --color-success: rgba(16, 185, 129, 0.8);
+  --color-success-border: rgba(16, 185, 129, 1);
+  --color-error: rgba(239, 68, 68, 0.8);
+  --color-error-border: rgba(239, 68, 68, 1);
 
   --section-gap: 160px;
 }

@@ -51,7 +51,7 @@
 </template>
 
 <script setup>
-import { ref, defineEmits, watchEffect } from "vue";
+import { ref, watchEffect } from "vue";
 import Button from "./Button.vue";
 import ButtonLink from "./ButtonLink.vue";
 const props = defineProps({

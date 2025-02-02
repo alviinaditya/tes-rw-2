@@ -7,9 +7,10 @@
       </template>
       <form @submit.prevent="handleLogin" class="form-group">
         <Input
-          id="username"
-          label="Username"
+          id="email"
+          label="Email"
           type="email"
+          autocomplete="email"
           v-model="request.username"
           placeholder="email@example.com"
         />
@@ -33,17 +34,20 @@
 </template>
 <script setup>
 import { useAuthStore } from "@/stores/auth";
-import { loginApi } from "@/api/index.js";
+import { apiUrls } from "@/api/index.js";
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import Button from "@/components/ui/Button.vue";
 import Card from "@/components/ui/Card.vue";
 import Input from "@/components/ui/Input.vue";
 import LoadingScreen from "@/components/LoadingScreen.vue";
+import useFetch from "@/composables/useFetch";
+import { useToastStore } from "@/stores/toast";
 
+const { isLoading, response, error, fetchData } = useFetch();
 const router = useRouter();
 const store = useAuthStore();
-const isLoading = ref(false);
+const toastStore = useToastStore();
 const isCheckingAuth = ref(true);
 const request = ref({
   username: "",
@@ -51,17 +55,13 @@ const request = ref({
 });
 
 const handleLogin = async () => {
-  isLoading.value = true;
-  try {
-    const res = await loginApi(request.value.username, request.value.password);
-    const data = await res.json();
-    localStorage.setItem("token", data.token);
-    store.token = data.token;
+  await fetchData("POST", apiUrls.login(), request.value).then(() => {
+    store.setToken(response.value.token);
     router.push({ name: "dashboard" });
-  } catch (error) {
-    console.log(error);
-  } finally {
-    isLoading.value = false;
+  });
+
+  if (error.value) {
+    toastStore.addToast(error.value, "error");
   }
 };
 
