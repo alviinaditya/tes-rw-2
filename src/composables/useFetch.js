@@ -11,6 +11,7 @@ export default function useFetch() {
 
   const fetchData = async (method, url, body, options = {}) => {
     state.isLoading = true;
+    state.error = null;
     try {
       const headers = {
         "Content-Type": "application/json",
@@ -29,7 +30,7 @@ export default function useFetch() {
       });
       const json = await response.json();
       if (!response.ok) {
-        throw new Error(json.message);
+        throw new Error(json.message || "Something went wrong");
       }
       state.response = json;
     } catch (fetchError) {
