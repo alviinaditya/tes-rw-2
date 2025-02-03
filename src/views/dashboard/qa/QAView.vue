@@ -1,5 +1,5 @@
 <template>
-  <AuthGuard :isLoading>
+  <div>
     <div class="heading-container">
       <h1>Question</h1>
     </div>
@@ -20,17 +20,17 @@
       <Button
         variant="primary"
         type="submit"
-        :isLoading="isSubmitting"
-        :disabled="isSubmitting"
+        :isLoading="isLoading"
+        :disabled="isLoading"
         >Submit</Button
       >
     </form>
-    <template v-if="responses.length > 0">
+    <template v-if="response.data">
       <div class="response-container">
         <span class="response-title">Answer</span>
         <ol class="response-list">
           <li
-            v-for="(response, index) in responses"
+            v-for="(response, index) in response.data"
             :key="index"
             class="response-item"
           >
@@ -39,54 +39,39 @@
         </ol>
       </div>
     </template>
-  </AuthGuard>
+  </div>
 </template>
 <script setup>
-import AuthGuard from "@/components/AuthGuard.vue";
-import { getCategoryListApi, postQAAnswerApi } from "@/api/index.js";
+import { apiUrls } from "@/api/index.js";
 import { ref } from "vue";
-import { onMounted } from "vue";
 import SelectOptions from "@/components/ui/SelectOptions.vue";
 import TextArea from "@/components/ui/TextArea.vue";
 import Button from "@/components/ui/Button.vue";
+import useCategories from "@/composables/useCategories";
+import useFetch from "@/composables/useFetch";
+import { useToastStore } from "@/stores/toast";
 
+const { fetchAllCategories } = useCategories();
+const { isLoading, response, error, fetchData } = useFetch();
+
+const toastStore = useToastStore();
 const categories = ref([]);
-const isSubmitting = ref(false);
-const isLoading = ref(true);
 const request = ref({
   categoryId: "",
   content: "",
 });
 
-const responses = ref([]);
+categories.value = await fetchAllCategories();
 
 const handleSubmit = async () => {
-  isSubmitting.value = true;
-  try {
-    const res = await postQAAnswerApi({
-      category_id: request.value.categoryId,
-      content: request.value.content,
-    });
-    const data = await res.json();
-    responses.value = data.data;
-  } catch (error) {
-    console.log(error);
-  } finally {
-    isSubmitting.value = false;
+  await fetchData("POST", apiUrls.qa(), request.value);
+
+  if (error.value) {
+    toastStore.addToast(error.value, "error");
+  } else {
+    toastStore.addToast("Question submitted successfully", "success");
   }
 };
-
-onMounted(async () => {
-  try {
-    const res = await getCategoryListApi();
-    const data = await res.json();
-    categories.value = data.data.result;
-  } catch (error) {
-    console.log(error);
-  } finally {
-    isLoading.value = false;
-  }
-});
 </script>
 <style scoped>
 .response-container {

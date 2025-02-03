@@ -67,7 +67,7 @@ const handleLogin = async () => {
 
 onMounted(() => {
   if (store.isAuthenticated) {
-    router.push({ name: "dashboard" });
+    router.push({ name: "departments" });
   }
   isCheckingAuth.value = false;
 });

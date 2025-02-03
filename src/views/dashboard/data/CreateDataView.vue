@@ -1,5 +1,5 @@
 <template>
-  <AuthGuard :isLoading>
+  <div>
     <div class="heading-container">
       <h1>Create Data</h1>
       <Button @click="handleBack" size="small">Back</Button>
@@ -21,61 +21,48 @@
       <Button
         variant="primary"
         type="submit"
-        :isLoading="isSubmitting"
-        :disabled="isSubmitting"
+        :isLoading="isLoading"
+        :disabled="isLoading"
         >Create Data</Button
       >
     </form>
-  </AuthGuard>
+  </div>
 </template>
 <script setup>
-import AuthGuard from "@/components/AuthGuard.vue";
-import { getCategoryListApi, createDataApi } from "@/api/index.js";
+import { apiUrls } from "@/api/index.js";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { onMounted } from "vue";
 import Button from "@/components/ui/Button.vue";
 import SelectOptions from "@/components/ui/SelectOptions.vue";
 import TextArea from "@/components/ui/TextArea.vue";
+import useCategories from "@/composables/useCategories";
+import useFetch from "@/composables/useFetch";
+import { useToastStore } from "@/stores/toast";
 
+const { fetchAllCategories } = useCategories();
+const { isLoading, error, fetchData } = useFetch();
+const toastStore = useToastStore();
 const router = useRouter();
 const categories = ref([]);
-const isSubmitting = ref(false);
-const isLoading = ref(true);
 const request = ref({
   categoryId: "",
   content: "",
 });
-
+categories.value = await fetchAllCategories();
 const handleBack = () => {
   router.back();
 };
 
 const handleSubmit = async () => {
-  isSubmitting.value = true;
-  try {
-    const res = await createDataApi({
-      category_id: request.value.categoryId,
-      content: request.value.content,
-    });
-    const data = await res.json();
+  await fetchData("POST", apiUrls.createData(), {
+    category_id: request.value.categoryId,
+    content: request.value.content,
+  });
+  if (error.value) {
+    toastStore.addToast(error.value, "error");
+  } else {
+    toastStore.addToast("Data created successfully", "success");
     router.push({ name: "data" });
-  } catch (error) {
-    console.log(error);
-  } finally {
-    isSubmitting.value = false;
   }
 };
-
-onMounted(async () => {
-  try {
-    const res = await getCategoryListApi();
-    const data = await res.json();
-    categories.value = data.data.result;
-  } catch (error) {
-    console.log(error);
-  } finally {
-    isLoading.value = false;
-  }
-});
 </script>

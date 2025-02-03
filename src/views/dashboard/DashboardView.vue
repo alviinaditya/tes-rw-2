@@ -1,50 +1,34 @@
 <template>
-  <AuthGuard>
-    <LoadingScreen v-if="isLoading" />
-    <template v-else>
-      <div class="heading-container">
-        <h1>Dashboard</h1>
-      </div>
-      <div
-        v-for="department in departmentList"
-        :key="department.id"
-        class="department-list"
-      >
-        <Card>{{ department }} Department</Card>
-      </div>
-    </template>
-  </AuthGuard>
+  <header>
+    <Navbar />
+  </header>
+  <main class="layout">
+    <RouterView v-slot="{ Component }">
+      <Transition mode="out-in" name="fade">
+        <Suspense timeout="0">
+          <component :is="Component" />
+          <template #fallback>
+            <LoadingScreen />
+          </template>
+        </Suspense>
+      </Transition>
+    </RouterView>
+  </main>
 </template>
 <script setup>
-import AuthGuard from "@/components/AuthGuard.vue";
-import { getDepartmentListApi } from "@/api/index.js";
-import { ref, onMounted } from "vue";
-import Card from "@/components/ui/Card.vue";
 import LoadingScreen from "@/components/LoadingScreen.vue";
-
-const departmentList = ref([]);
-const isLoading = ref(false);
-
-const getDepartments = async () => {
-  isLoading.value = true;
-  try {
-    const res = await getDepartmentListApi();
-    const data = await res.json();
-    departmentList.value = data.data;
-  } catch (error) {
-    console.log(error);
-  } finally {
-    isLoading.value = false;
-  }
-};
-
-onMounted(() => {
-  getDepartments();
-});
+import Navbar from "@/components/Navbar.vue";
+import { RouterView } from "vue-router";
 </script>
 
 <style scoped>
-.department-list {
-  margin-bottom: 1rem;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

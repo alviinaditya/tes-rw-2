@@ -1,5 +1,5 @@
 <template>
-  <AuthGuard :isLoading>
+  <div>
     <div class="heading-container">
       <h1>Create Category</h1>
       <Button @click="handleBack" size="small">Back</Button>
@@ -10,7 +10,7 @@
         label="Department"
         placeholder="Select Department"
         v-model="request.department"
-        :options="departmentList"
+        :options="departments"
         valueField="name"
       />
       <Input
@@ -19,48 +19,36 @@
         type="text"
         v-model="request.name"
         placeholder="Enter name here"
+        autocomplete="off"
       />
       <Button
         variant="primary"
         type="submit"
-        :isLoading="isSubmitting"
-        :disabled="isSubmitting"
+        :isLoading="isLoading"
+        :disabled="isLoading"
         >Create Category</Button
       >
     </form>
-  </AuthGuard>
+  </div>
 </template>
 <script setup>
-import AuthGuard from "@/components/AuthGuard.vue";
-import { createCategoryApi, getDepartmentListApi } from "@/api/index.js";
-import { onMounted, ref } from "vue";
+import { apiUrls } from "@/api/index.js";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 import Button from "@/components/ui/Button.vue";
 import Input from "@/components/ui/Input.vue";
 import SelectOptions from "@/components/ui/SelectOptions.vue";
+import useDepartments from "@/composables/useDepartments";
+import useFetch from "@/composables/useFetch";
+import { useToastStore } from "@/stores/toast";
 
-const departmentList = ref([]);
+const { departments, fetchDepartments } = useDepartments();
+const { isLoading, error, fetchData } = useFetch();
+const toastStore = useToastStore();
 const router = useRouter();
-const isSubmitting = ref(false);
-const isLoading = ref(true);
 const request = ref({
   department: "",
   name: "",
-});
-
-onMounted(async () => {
-  try {
-    const res = await getDepartmentListApi();
-    const data = await res.json();
-    departmentList.value = data.data.map((department, index) => ({
-      id: (index + 1).toString(),
-      name: department,
-    }));
-  } catch (error) {
-    console.log(error);
-  } finally {
-    isLoading.value = false;
-  }
 });
 
 const handleBack = () => {
@@ -68,18 +56,18 @@ const handleBack = () => {
 };
 
 const handleSubmit = async () => {
-  isSubmitting.value = true;
-  try {
-    const res = await createCategoryApi({
-      department: request.value.department,
-      name: request.value.name,
-    });
-    const data = await res.json();
-    router.push({ name: "categories" });
-  } catch (error) {
-    console.log(error);
-  } finally {
-    isSubmitting.value = false;
+  await fetchData("POST", apiUrls.createCategory(), {
+    name: request.value.name,
+    department: request.value.department,
+  });
+
+  if (error.value) {
+    toastStore.addToast(error.value, "error");
+  } else {
+    toastStore.addToast("Category created successfully", "success");
+    router.push({ name: "category" });
   }
 };
+
+await fetchDepartments();
 </script>
