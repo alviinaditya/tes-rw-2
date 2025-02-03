@@ -57,7 +57,7 @@ const request = ref({
 const handleLogin = async () => {
   await fetchData("POST", apiUrls.login(), request.value).then(() => {
     store.setToken(response.value.token);
-    router.push({ name: "dashboard" });
+    router.push({ name: "departments" });
   });
 
   if (error.value) {
