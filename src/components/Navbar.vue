@@ -47,7 +47,7 @@ const handleLogout = () => {
 .navbar-items > a:hover {
   color: var(--color-primary-text);
 }
-.navbar-items > a.router-link-active {
+.navbar-items > a.router-link-exact-active {
   font-weight: 600;
   color: var(--color-primary-text);
 }

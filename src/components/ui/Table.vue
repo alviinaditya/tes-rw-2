@@ -74,12 +74,20 @@ const props = defineProps({
 
 const emit = defineEmits(["onPageChange"]);
 
-const currentPage = ref(Number(props.pagination.current_page));
-const totalPages = ref(Number(props.pagination.total_page));
+const currentPage = ref(
+  props.pagination?.current_page ? Number(props.pagination.current_page) : 1
+);
+const totalPages = ref(
+  props.pagination?.total_page ? Number(props.pagination.total_page) : 1
+);
 
 watchEffect(() => {
-  currentPage.value = Number(props.pagination.current_page);
-  totalPages.value = Number(props.pagination.total_page);
+  currentPage.value = props.pagination?.current_page
+    ? Number(props.pagination.current_page)
+    : 1;
+  totalPages.value = props.pagination?.total_page
+    ? Number(props.pagination.total_page)
+    : 1;
 });
 
 const goToNextPage = () => {
